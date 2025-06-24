@@ -32,5 +32,6 @@ jobs:
           application_name: weather-api
           environment_name: Weather-api-env 
           version_label: v-${{ github.run_number }}
+          use_existing_version_if_available: true
           region: eu-north-1  # update to your actual region
           deployment_package: app.zip
