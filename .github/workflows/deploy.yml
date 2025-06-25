@@ -1,20 +1,20 @@
-name: Deploy to Elastic Beanstalk
+name: Deploy to Elastic Beanstalk # Workflow name (shows in GitHub)
 
-on:
+on:       # When to run
   push:
     branches:
-      - main  # Change if your branch is different
+      - main  # Only on pushes to main branch
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  deploy:   # Job name
+    runs-on: ubuntu-latest # Virtual machine type (free Linux)
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    steps:   # Sequential tasks
+      - name: Checkout code   # Step description
+        uses: actions/checkout@v3   # Pre-built action from GitHub
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3 # Action to install Node.js
         with:
           node-version: '18'  # or your Node version
 
