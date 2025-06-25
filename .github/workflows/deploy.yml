@@ -23,18 +23,29 @@ jobs:
       
       - name: Run tests
         run: npm test
+        env:
+          NODE_ENV: test
+          CI: true
 
-      - name: Zip source code
-        run: zip -r app.zip . -x "*.git*" "node_modules/*"
+      - name: Create deployment package
+        run: |
+          zip -r app.zip . \
+            -x "*.git*" \
+            -x "node_modules/*" \
+            -x "*.test.js" \
+            -x "coverage/*" \
+            -x ".env.local" \
+            -x "*.log"
 
       - name: Deploy to Elastic Beanstalk
+        if: success() # Only deploy if tests pass
         uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: weather-api
-          environment_name: Weather-api-env 
+          environment_name: Weather-api-env
           version_label: v-${{ github.run_number }}
           use_existing_version_if_available: true
-          region: eu-north-1  # update to your actual region
+          region: eu-north-1
           deployment_package: app.zip

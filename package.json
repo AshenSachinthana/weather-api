@@ -4,8 +4,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js",
-    "test": "jest"
+    "test": "jest --passWithNoTests --silent --ci",
+    "test:local": "jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,21 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/supertest": "^6.0.3",
     "jest": "^30.0.3",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.1",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": false,
+    "silent": true,
+    "collectCoverage": false,
+    "testTimeout": 30000,
+    "forceExit": true,
+    "detectOpenHandles": true
   }
 }
