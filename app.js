@@ -6,6 +6,10 @@ const PORT = process.env.PORT || 3000;
 const path = require("path");
 app.use(express.json());
 
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Root route - serve index.html
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -19,13 +23,11 @@ app.get("/health", (req, res) => {
 app.get("/weather/:city", async (req, res) => {
   try {
     const { city } = req.params;
-
-    // Using OpenWeatherMap API (you'll need to get a free API key)
     const API_KEY = process.env.WEATHER_API_KEY || "demo_key";
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
-
+    
     const response = await axios.get(url);
-
+    
     const weatherData = {
       city: response.data.name,
       country: response.data.sys.country,
@@ -35,7 +37,7 @@ app.get("/weather/:city", async (req, res) => {
       windSpeed: response.data.wind.speed,
       timestamp: new Date().toISOString(),
     };
-
+    
     res.json(weatherData);
   } catch (error) {
     res.status(500).json({
@@ -45,17 +47,19 @@ app.get("/weather/:city", async (req, res) => {
   }
 });
 
-// Default route
-app.get("/", (req, res) => {
-  res.json({
-    message: "Weather API is running!",
-    endpoints: {
-      health: "/health",
-      weather: "/weather/:city",
-    },
+// Start server only if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  const server = app.listen(PORT, () => {
+    console.log(`Weather API running on port ${PORT}`);
   });
-});
+  
+  // Graceful shutdown for production
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down gracefully');
+    server.close(() => {
+      console.log('Process terminated');
+    });
+  });
+}
 
-app.listen(PORT, () => {
-  console.log(`Weather API running on port ${PORT}`);
-});
+module.exports = app;
