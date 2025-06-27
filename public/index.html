@@ -66,9 +66,13 @@
       }
       /* Special style for temperature row */
       #weather-card .row.temp-row {
+        display: flex;
         justify-content: center;
+        align-items: center;
+        width: 100%;
         font-size: 2.2em;
         margin: 18px 0 10px 0;
+        text-align: center;
       }
       #weather-card .row.temp-row .label {
         font-size: 1.2em;
@@ -78,8 +82,9 @@
       #weather-card .row.temp-row .value {
         font-size: 1.2em;
         color: #e67e22;
-        margin-left: 10px;
-        text-align: left;
+        margin-left: 0px;
+        text-align: center;
+        flex: unset;
       }
       /* Responsive design */
       @media (max-width: 500px) {
